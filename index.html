@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#1a0518">
+<title>Món Quà Nhỏ 20/10 💐</title>
+<style>
+  :root{
+    --pink:#ff6b9d;
+    --bg1:#3a0d2a;
+    --bg2:#1a0518;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg2) 70%);
+    color:#fff;overflow:hidden;user-select:none;
+  }
+
+  .screen{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:24px;overflow:hidden;
+    transition:opacity .8s ease,transform .8s ease;
+  }
+  .screen.hidden{opacity:0;pointer-events:none;transform:scale(1.05);}
+
+  .hearts-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+  .float-heart{
+    position:absolute;bottom:-60px;opacity:0;
+    animation:floatUp linear infinite;
+    will-change:transform,opacity;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0deg) scale(.6);opacity:0;}
+    15%{opacity:var(--o,.6);}
+    85%{opacity:var(--o,.6);}
+    100%{transform:translateY(-115vh) rotate(360deg) scale(1.1);opacity:0;}
+  }
+
+  .title{
+    font-size:clamp(26px,7vw,40px);font-weight:800;text-align:center;
+    background:linear-gradient(90deg,#ffd1e3,#ff6b9d,#ffd1e3);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 18px rgba(255,107,157,.55));
+    margin-bottom:14px;
+    animation:glow 2.5s ease-in-out infinite alternate;
+  }
+  @keyframes glow{to{filter:drop-shadow(0 0 30px rgba(255,107,157,.9));}}
+  .subtitle{color:#ffb3cd;font-size:15px;margin-bottom:28px;text-align:center;line-height:1.5;}
+
+  .dots{display:flex;gap:18px;align-items:center;height:30px;margin-bottom:6px;}
+  .dot{
+    width:16px;height:16px;border-radius:50%;
+    border:2px solid var(--pink);
+    transition:all .2s ease;
+  }
+  .dot.filled{
+    background:var(--pink);
+    box-shadow:0 0 14px var(--pink);
+    transform:scale(1.15);
+  }
+  .dots.shake{animation:shake .5s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-10px);}
+    40%{transform:translateX(10px);}
+    60%{transform:translateX(-7px);}
+    80%{transform:translateX(7px);}
+  }
+
+  .keypad{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:14px;width:min(300px,84vw);margin-top:24px;
+  }
+  .key{
+    aspect-ratio:1;border-radius:50%;
+    border:1.5px solid rgba(255,107,157,.45);
+    background:rgba(255,255,255,.06);
+    backdrop-filter:blur(6px);
+    color:#ffe3ee;font-size:26px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-family:inherit;
+    transition:transform .12s,background .2s,box-shadow .2s;
+  }
+  .key:active{transform:scale(.9);background:rgba(255,107,157,.35);box-shadow:0 0 22px rgba(255,107,157,.6);}
+  .key.wide{font-size:16px;}
+  .key.clear{font-size:16px;color:#ff9ab8;}
+
+  .hint{height:22px;margin-top:16px;color:#ff9ab8;font-size:14px;text-align:center;}
+
+  .loader-heart{font-size:64px;animation:beat 1s ease-in-out infinite;}
+  @keyframes beat{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+  .loading-text{margin:20px 0 18px;color:#ffc9dd;letter-spacing:1px;font-size:15px;}
+  .progress{
+    width:min(240px,70vw);height:8px;border-radius:99px;
+    background:rgba(255,255,255,.12);overflow:hidden;
+  }
+  .progress-bar{
+    height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff9ab8,#ff6b9d,#ff3d7f);
+    box-shadow:0 0 14px var(--pink);
+    transition:width .15s linear;
+  }
+
+  .hold-btn{
+    position:relative;width:170px;height:170px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;touch-action:none;
+    filter:drop-shadow(0 0 22px rgba(255,107,157,.4));
+  }
+  .ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);}
+  .ring-bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:6;}
+  .ring-progress{
+    fill:none;stroke:var(--pink);stroke-width:6;stroke-linecap:round;
+    filter:drop-shadow(0 0 8px var(--pink));
+  }
+  .hold-inner{
+    width:132px;height:132px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,rgba(255,107,157,.35),rgba(255,107,157,.1));
+    border:1.5px solid rgba(255,107,157,.5);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,107,157,.45);}
+    50%{box-shadow:0 0 0 18px rgba(255,107,157,0);}
+  }
+  .hold-icon{font-size:30px;}
+  .hold-text{font-size:13px;color:#ffc9dd;letter-spacing:.5px;}
+
+  .click-hint{
+    font-size:clamp(20px,5.5vw,28px);color:#ffd1e3;
+    margin-bottom:34px;letter-spacing:1px;font-weight:600;
+    animation:breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.6;transform:scale(.98);}50%{opacity:1;transform:scale(1.04);}}
+
+  .envelope{
+    position:relative;width:min(300px,82vw);aspect-ratio:1.5;
+    cursor:pointer;perspective:900px;
+    filter:drop-shadow(0 18px 30px rgba(0,0,0,.5));
+  }
+  .env-back,.env-front,.env-flap{position:absolute;inset:0;border-radius:10px;}
+  .env-back{background:linear-gradient(160deg,#c72f63,#a11f4c);}
+  .env-letter{
+    position:absolute;left:8%;top:8%;width:84%;height:84%;
+    background:linear-gradient(160deg,#fff,#ffe9f1);
+    border-radius:6px;display:flex;align-items:center;justify-content:center;
+    font-size:52px;z-index:2;
+    box-shadow:0 6px 16px rgba(0,0,0,.25);
+    transition:transform .9s cubic-bezier(.34,1.56,.64,1) .35s;
+  }
+  .env-front{
+    background:linear-gradient(200deg,#ff7aa8,#e8407a);
+    clip-path:polygon(0 0,50% 42%,100% 0,100% 100%,0 100%);
+    z-index:3;
+  }
+  .env-flap{
+    height:56%;
+    background:linear-gradient(180deg,#ff8fb4,#e8407a);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center;z-index:4;
+    border-radius:10px 10px 0 0;
+    transition:transform .7s ease;
+  }
+  .envelope.open .env-flap{transform:rotateX(180deg);z-index:1;}
+  .envelope.open .env-letter{transform:translateY(-46%) scale(1.06);z-index:5;}
+
+  .letter-paper{
+    width:min(560px,92vw);max-height:68vh;overflow-y:auto;
+    background:linear-gradient(165deg,#fffdf8,#ffeef5);
+    border-radius:18px;
+    padding:clamp(22px,5vw,38px);
+    box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,107,157,.25),
+               inset 0 0 40px rgba(255,107,157,.06);
+    color:#5a1f36;
+    scrollbar-width:thin;
+    scrollbar-color:var(--pink) transparent;
+  }
+  .letter-paper::-webkit-scrollbar{width:6px;}
+  .letter-paper::-webkit-scrollbar-thumb{background:var(--pink);border-radius:99px;}
+  .letter-line{
+    font-size:clamp(15px,4vw,18px);line-height:1.8;
+    margin-bottom:16px;
+    font-family:'Times New Roman',Georgia,serif;
+  }
+  .letter-line:last-child{margin-bottom:0;}
+
+  .replay-btn{
+    margin-top:18px;padding:12px 28px;border-radius:99px;
+    border:1.5px solid rgba(255,107,157,.6);
+    background:rgba(255,107,157,.15);
+    color:#ffd1e3;font-size:15px;font-family:inherit;cursor:pointer;
+    opacity:0;pointer-events:none;
+    transition:all .4s ease;
+  }
+  .replay-btn.show{opacity:1;pointer-events:auto;}
+  .replay-btn:active{transform:scale(.94);}
+
+  .petal{
+    position:absolute;top:-40px;
+    animation:fall linear forwards;
+    pointer-events:none;z-index:10;
+  }
+  @keyframes fall{
+    to{transform:translateY(110vh) rotate(360deg);opacity:0;}
+  }
+
+  /* ===== NÚT NHẠC ===== */
+  .music-toggle{
+    position:fixed;top:16px;right:16px;z-index:99999;
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(255,107,157,.18);
+    border:1.5px solid rgba(255,107,157,.5);
+    color:#ffd1e3;font-size:20px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    transition:transform .15s,background .2s;
+    font-family:inherit;
+  }
+  .music-toggle:active{transform:scale(.9);}
+  .music-toggle.playing{
+    background:rgba(255,107,157,.4);
+    animation:pulseMusic 2s ease-in-out infinite;
+  }
+  @keyframes pulseMusic{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,107,157,.55);}
+    50%{box-shadow:0 0 0 14px rgba(255,107,157,0);}
+  }
+</style>
+</head>
+<body>
+
+<!-- Nút bật/tắt nhạc -->
+<button class="music-toggle" id="musicToggle" aria-label="Bật/tắt nhạc">🔇</button>
+
+<!-- YouTube player ẩn -->
+<div id="ytPlayer" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"></div>
+
+<div class="screen" id="screen-lock">
+  <div class="hearts-bg" id="hearts1"></div>
+  <h1 class="title">💐 Món Quà Nhỏ 💐</h1>
+  <p class="subtitle">Nhập mật khẩu để mở món quà dành tặng bạn</p>
+
+  <div class="dots" id="dots">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <div class="keypad" id="keypad"></div>
+  <p class="hint" id="hint"></p>
+</div>
+
+<div class="screen hidden" id="screen-loading">
+  <div class="loader-heart">💐</div>
+  <p class="loading-text">Đang chuẩn bị món quà...</p>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</div>
+
+<div class="screen hidden" id="screen-hold">
+  <div class="hearts-bg" id="hearts2"></div>
+  <div class="hold-btn" id="holdBtn">
+    <svg class="ring" viewBox="0 0 120 120">
+      <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+      <circle class="ring-progress" cx="60" cy="60" r="54" id="ringProgress"></circle>
+    </svg>
+    <div class="hold-inner">
+      <span class="hold-icon">🌸</span>
+      <span class="hold-text">Giữ để bắt đầu</span>
+    </div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-envelope">
+  <p class="click-hint">Click vào nhé 💌</p>
+  <div class="envelope" id="envelope">
+    <div class="env-back"></div>
+    <div class="env-letter">💌</div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-letter">
+  <div class="hearts-bg" id="hearts3"></div>
+  <div class="letter-paper">
+    <div id="letterContent"></div>
+  </div>
+  <button class="replay-btn" id="replayBtn">Xem lại 💐</button>
+</div>
+
+<script>
+/* ==========================================================
+   ⚙️ CẤU HÌNH
+   ========================================================== */
+const PASSWORD = '2010';
+const HINT_TEXT = 'Gợi ý: Ngày 20/10 đó 🌷';
+const HOLD_MS = 1600;
+const VIDEO_ID = 'EmtbOdNdwBs';
+const MUSIC_VOLUME = 55;   // 0-100
+
+const LETTER_LINES = [
+  'Gửi bạn thân mến 💐',
+  'Nhân ngày Phụ nữ Việt Nam 20/10, mình gửi đến bạn món quà nhỏ này — không gì to tát, chỉ là chút tấm lòng để bạn biết rằng bạn là một người bạn rất tuyệt vời.',
+  'Cảm ơn bạn vì đã luôn ở đó, đã cùng mình đi qua bao nhiêu chuyện vui buồn, và đã là một phần không thể thiếu trong những ngày tháng đẹp nhất.',
+  'Chúc bạn 20/10 thật nhiều niềm vui, luôn xinh đẹp, mạnh khỏe, học giỏi và gặp thật nhiều điều may mắn nhé!',
+  'Và nhớ rằng, dù có chuyện gì, luôn có một đứa bạn sẵn sàng bên cạnh bạn 💕'
+];
+/* ========================================================== */
+
+
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  $(id).classList.remove('hidden');
+}
+
+/* ==========================================================
+   🎵 NHẠC NỀN
+   ========================================================== */
+let ytPlayer = null;
+let ytReady = false;
+let musicOn = false;
+let musicStarted = false;
+let pendingPlay = false;
+
+const musicBtn = $('musicToggle');
+
+function updateMusicBtn(){
+  musicBtn.textContent = musicOn ? '🔊' : '🔇';
+  musicBtn.classList.toggle('playing', musicOn);
+}
+
+function playMusic(){
+  if(!ytReady || !ytPlayer || typeof ytPlayer.playVideo !== 'function'){
+    pendingPlay = true;
+    return;
+  }
+  try{
+    ytPlayer.playVideo();
+    ytPlayer.setVolume(MUSIC_VOLUME);
+    musicOn = true;
+    pendingPlay = false;
+    updateMusicBtn();
+  } catch(err){
+    console.warn('playMusic error:', err);
+  }
+}
+
+function pauseMusic(){
+  if(!ytReady || !ytPlayer) return;
+  try{
+    ytPlayer.pauseVideo();
+    musicOn = false;
+    updateMusicBtn();
+  } catch(err){}
+}
+
+function toggleMusic(e){
+  if(e){ e.stopPropagation(); e.preventDefault(); }
+  if(!musicStarted){
+    // Lần đầu bấm nút → bật luôn
+    musicStarted = true;
+    playMusic();
+    return;
+  }
+  if(musicOn) pauseMusic();
+  else playMusic();
+}
+
+musicBtn.addEventListener('click', toggleMusic);
+
+// Chạm vào màn hình lần đầu → bật nhạc
+document.addEventListener('pointerdown', function(e){
+  if(musicStarted) return;
+  if(e.target.closest('#musicToggle')) return;
+  musicStarted = true;
+  playMusic();
+});
+
+/* ===== Load YouTube IFrame API ===== */
+(function loadYT(){
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+})();
+
+window.onYouTubeIframeAPIReady = function(){
+  ytPlayer = new YT.Player('ytPlayer', {
+    height: '1',
+    width: '1',
+    videoId: VIDEO_ID,
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      loop: 1,
+      playlist: VIDEO_ID,
+      modestbranding: 1,
+      playsinline: 1,
+      rel: 0,
+      iv_load_policy: 3,
+      fs: 0
+    },
+    events: {
+      onReady: function(){
+        ytReady = true;
+        try{ ytPlayer.setVolume(MUSIC_VOLUME); }catch(e){}
+        if(pendingPlay){
+          playMusic();
+        }
+      },
+      onStateChange: function(ev){
+        // Nếu video bị dừng ngoài ý muốn khi đang bật thì phát lại
+        if(ev.data === 0 && musicOn){
+          try{ ytPlayer.seekTo(0); ytPlayer.playVideo(); }catch(e){}
+        }
+      }
+    }
+  });
+};
+
+/* ==========================================================
+   TIM BAY NỀN
+   ========================================================== */
+function initHearts(container, count){
+  if(!container) return;
+  const emojis = ['💐','🌸','🌷','🌺','🌹','✨','💕','🦋','🎀'];
+  for(let i = 0; i < count; i++){
+    const el = document.createElement('span');
+    el.className = 'float-heart';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.fontSize = (12 + Math.random() * 24) + 'px';
+    el.style.animationDuration = (8 + Math.random() * 10) + 's';
+    el.style.animationDelay = (Math.random() * 12) + 's';
+    el.style.setProperty('--o', (0.25 + Math.random() * 0.5).toFixed(2));
+    container.appendChild(el);
+  }
+}
+
+/* ==========================================================
+   MÀN 1 — MẬT KHẨU
+   ========================================================== */
+let input = '';
+let wrongCount = 0;
+const dotsEl = $('dots');
+const hintEl = $('hint');
+const dotEls = [...dotsEl.querySelectorAll('.dot')];
+
+const KEYS = [
+  {k:'1'},{k:'2'},{k:'3'},
+  {k:'4'},{k:'5'},{k:'6'},
+  {k:'7'},{k:'8'},{k:'9'},
+  {k:'clear', label:'Hủy', cls:'clear wide'},
+  {k:'0'},
+  {k:'back',  label:'⌫',   cls:'wide'}
+];
+
+(function buildKeypad(){
+  const pad = $('keypad');
+  KEYS.forEach(item => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'key' + (item.cls ? ' ' + item.cls : '');
+    btn.textContent = item.label ?? item.k;
+    btn.addEventListener('click', () => pressKey(item.k));
+    pad.appendChild(btn);
+  });
+})();
+
+function updateDots(){
+  dotEls.forEach((d, i) => d.classList.toggle('filled', i < input.length));
+}
+
+function pressKey(key){
+  if(key === 'clear'){ input = ''; updateDots(); return; }
+  if(key === 'back'){  input = input.slice(0, -1); updateDots(); return; }
+  if(input.length >= 4) return;
+  input += key;
+  updateDots();
+  if(input.length === 4) setTimeout(checkPassword, 250);
+}
+
+function checkPassword(){
+  if(input === PASSWORD){
+    hintEl.style.color = '#7dffb0';
+    hintEl.textContent = 'Chính xác! 🎉';
+    setTimeout(() => {
+      showScreen('screen-loading');
+      startLoading();
+    }, 500);
+  } else {
+    wrongCount++;
+    dotsEl.classList.add('shake');
+    hintEl.style.color = '#ff7b7b';
+    hintEl.textContent = 'Mật khẩu chưa đúng rồi 🥺';
+
+    setTimeout(() => {
+      dotsEl.classList.remove('shake');
+      input = '';
+      updateDots();
+      if(wrongCount >= 2){
+        hintEl.style.color = '#ffd1e3';
+        hintEl.textContent = HINT_TEXT;
+      } else {
+        hintEl.textContent = '';
+      }
+    }, 1000);
+  }
+}
+
+/* ==========================================================
+   MÀN 2 — LOADING
+   ========================================================== */
+function startLoading(){
+  const bar = $('progressBar');
+  let p = 0;
+  const timer = setInterval(() => {
+    p += Math.random() * 9 + 4;
+    if(p >= 100){
+      p = 100;
+      clearInterval(timer);
+      setTimeout(() => showScreen('screen-hold'), 600);
+    }
+    bar.style.width = p + '%';
+  }, 120);
+}
+
+/* ==========================================================
+   MÀN 3 — GIỮ ĐỂ BẮT ĐẦU
+   ========================================================== */
+const holdBtn = $('holdBtn');
+const ring = $('ringProgress');
+const CIRC = 2 * Math.PI * 54;
+
+ring.style.strokeDasharray = CIRC;
+ring.style.strokeDashoffset = CIRC;
+
+let holding = false;
+let holdStart = 0;
+let rafId = null;
+
+function startHold(e){
+  e.preventDefault();
+  if(holding) return;
+  holding = true;
+  holdStart = performance.now();
+  ring.style.transition = '';
+  rafId = requestAnimationFrame(tickHold);
+}
+
+function tickHold(now){
+  if(!holding) return;
+  const progress = Math.min((now - holdStart) / HOLD_MS, 1);
+  ring.style.strokeDashoffset = CIRC * (1 - progress);
+
+  if(progress >= 1){
+    holding = false;
+    cancelAnimationFrame(rafId);
+    ring.style.strokeDashoffset = 0;
+    setTimeout(() => showScreen('screen-envelope'), 300);
+    return;
+  }
+  rafId = requestAnimationFrame(tickHold);
+}
+
+function endHold(){
+  if(!holding) return;
+  holding = false;
+  cancelAnimationFrame(rafId);
+  ring.style.transition = 'stroke-dashoffset .35s ease';
+  ring.style.strokeDashoffset = CIRC;
+  setTimeout(() => { ring.style.transition = ''; }, 360);
+}
+
+holdBtn.addEventListener('pointerdown', startHold);
+holdBtn.addEventListener('contextmenu', e => e.preventDefault());
+window.addEventListener('pointerup', endHold);
+window.addEventListener('pointercancel', endHold);
+
+/* ==========================================================
+   MÀN 4 — PHONG BÌ
+   ========================================================== */
+const envelope = $('envelope');
+
+envelope.addEventListener('click', () => {
+  if(envelope.classList.contains('open')) return;
+  envelope.classList.add('open');
+  setTimeout(() => {
+    showScreen('screen-letter');
+    typeLetter();
+  }, 1400);
+});
+
+/* ==========================================================
+   MÀN 5 — LÁ THƯ
+   ========================================================== */
+let typingToken = 0;
+
+async function typeLetter(){
+  const token = ++typingToken;
+  const box = $('letterContent');
+  const replayBtn = $('replayBtn');
+
+  box.innerHTML = '';
+  replayBtn.classList.remove('show');
+
+  for(const line of LETTER_LINES){
+    if(token !== typingToken) return;
+
+    const p = document.createElement('p');
+    p.className = 'letter-line';
+    box.appendChild(p);
+
+    for(const ch of line){
+      if(token !== typingToken) return;
+      p.textContent += ch;
+      box.parentElement.scrollTop = box.parentElement.scrollHeight;
+      await sleep(38);
+    }
+    await sleep(450);
+  }
+
+  if(token !== typingToken) return;
+  replayBtn.classList.add('show');
+  spawnPetals();
+}
+
+function spawnPetals(){
+  const screen = $('screen-letter');
+  const emojis = ['💐','🌸','🌷','🌺','✨','🎀','💕','🌼'];
+  for(let i = 0; i < 32; i++){
+    const petal = document.createElement('span');
+    petal.className = 'petal';
+    petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.fontSize = (14 + Math.random() * 18) + 'px';
+    petal.style.animationDuration = (3 + Math.random() * 3) + 's';
+    petal.style.animationDelay = (Math.random() * 1.5) + 's';
+    screen.appendChild(petal);
+    setTimeout(() => petal.remove(), 9000);
+  }
+}
+
+/* ===== Xem lại (KHÔNG tắt nhạc) ===== */
+function resetAll(){
+  typingToken++;
+
+  input = '';
+  wrongCount = 0;
+  updateDots();
+  hintEl.textContent = '';
+  hintEl.style.color = '#ff9ab8';
+
+  envelope.classList.remove('open');
+
+  ring.style.transition = '';
+  ring.style.strokeDashoffset = CIRC;
+
+  $('letterContent').innerHTML = '';
+  $('replayBtn').classList.remove('show');
+  document.querySelectorAll('.petal').forEach(p => p.remove());
+
+  showScreen('screen-lock');
+}
+
+$('replayBtn').addEventListener('click', resetAll);
+
+/* ===== Khởi tạo ===== */
+initHearts($('hearts1'), 22);
+initHearts($('hearts2'), 16);
+initHearts($('hearts3'), 14);
+updateMusicBtn();
+</script>
+</body>
+</html>
